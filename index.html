@@ -24,13 +24,13 @@
 
         function prev_day() {
             var date = new Date(base_date.getTime() - 24 * 60 * 60 * 1000)
-            var date_str = `date=${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+            var date_str = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
             location.href = location.href.split('?')[0] + '?date=' + date_str
         }
 
         function next_day() {
             var date = new Date(base_date.getTime() + 24 * 60 * 60 * 1000)
-            var date_str = `date=${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+            var date_str = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
             location.href = location.href.split('?')[0] + '?date=' + date_str
         }
 
