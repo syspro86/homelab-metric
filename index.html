@@ -27,7 +27,7 @@
                             return
                         }
                         groups.push({
-                            id: group,
+                            id: ''+group,
                             content: group_name
                         })
                         var times = frame.data.values[0]
@@ -37,7 +37,7 @@
                             items.push({
                                 x: times[i],
                                 y: values[i],
-                                group: group
+                                group: ''+group
                             })
                         }
                     })
