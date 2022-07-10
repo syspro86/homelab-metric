@@ -12,45 +12,61 @@
 <body onload="fetch_cpu()">
     <div id="visualization"></div>
     <script type="text/javascript">
-        function fetch_cpu() {
-            fetch('2022/07/09/cpu.json')
+        var graph2d = null
+        var groups = []
+        var items = new vis.DataSet([])
+
+        function fetch_cpu(date) {
+            date = (date == null) ? new Date() : date
+            url = `${date.getFullYear()}/${('0'+(date.getMonth()+1)).slice(-2)}/${('0'+date.getDay()).slice(-2)}/cpu.json`
+            fetch(url)
                 .then(resp => resp.json())
                 .then(data => {
                     console.log(data)
                     var frames = data.results.A.frames
 
-                    var groups = []
-                    var items = []
-                    frames.forEach((frame, group) => {
-                        var group_name = frame.schema.fields.find(f => f.name == 'Value')?.labels?.instance
-                        if (group_name == null || group_name == '') {
+                    frames.forEach(frame => {
+                        var group = frame.schema.fields.find(f => f.name == 'Value')?.labels?.instance
+                        if (group == null || group == '') {
                             return
                         }
-                        groups.push({
-                            id: ''+group,
-                            content: group_name
-                        })
+                        if (groups.findIndex(g => g.id == group) < 0) {
+                            groups.push({
+                                id: group,
+                                content: group
+                            })
+                            if (graph2d != null) {
+                                graph2d.setGroups(new vis.DataSet(groups))
+                            }
+                        }
                         var times = frame.data.values[0]
                         var values = frame.data.values[1]
 
                         for (var i = 0; i < times.length; i++) {
-                            items.push({
+                            items.add({
                                 x: times[i],
                                 y: values[i],
-                                group: ''+group
+                                group: group
                             })
                         }
                     })
 
-                    var container = document.getElementById('visualization')
-                    var graph2d = new vis.Graph2d(container, new vis.DataSet(items), new vis.DataSet(groups), {
-                        legend: {
-                            left: {
-                                position: "top-left"
+                    if (graph2d == null) {
+                        var container = document.getElementById('visualization')
+                        var graph2d = new vis.Graph2d(container, items, new vis.DataSet(groups), {
+                            legend: {
+                                left: {
+                                    position: "top-left"
+                                }
                             }
-                        }
-                    })
+                        })
+                    }
+
+                    setTimeout(() => {
+                        fetch_cpu(new Date(date.getTime()-24*60*60*1000))
+                    }, 1000)
                 })
+                .catch(e => {})
         }
     </script>
 </body>
