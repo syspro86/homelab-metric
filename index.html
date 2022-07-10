@@ -1,0 +1,25 @@
+<html>
+
+<head>
+    <link href="https://unpkg.com/vis-timeline@latest/styles/vis-timeline-graph2d.min.css" rel="stylesheet"
+        type="text/css" />
+    <script type="text/javascript"
+        src="https://unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"></script>
+    <script>
+    </script>
+</head>
+
+<body>
+    <div id="visualization"></div>
+    <script type="text/javascript">
+        async function fetch_cpu() {
+            try {
+                var data = await fetch('2022/08/09/cpu.json')
+                console.log(data)
+            } catch (e) {
+            }
+        }
+    </script>
+</body>
+
+</html>
