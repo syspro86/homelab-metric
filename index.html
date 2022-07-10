@@ -22,7 +22,10 @@
                     var groups = []
                     var items = []
                     frames.forEach((frame, group) => {
-                        var group_name = frame.schema.fields.find(f => f.name == 'Value')?.labels.instance
+                        var group_name = frame.schema.fields.find(f => f.name == 'Value')?.labels?.instance
+                        if (group_name == null || group_name == '') {
+                            return
+                        }
                         groups.push({
                             id: group,
                             content: group_name
