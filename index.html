@@ -16,10 +16,12 @@
     </div>
     <div id="visualization"></div>
     <script type="text/javascript">
-        const params = new URLSearchParams(location.href);
         var base_date = new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
-        if (params.has('date')) {
-            base_date = new Date(params.get('date'))
+        if (location.href.split('?').length >= 2) {
+            const params = new URLSearchParams(location.href.split('?')[1]);
+            if (params.has('date')) {
+                base_date = new Date(params.get('date'))
+            }
         }
 
         function prev_day() {
