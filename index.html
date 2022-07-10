@@ -14,8 +14,39 @@
     <script type="text/javascript">
         async function fetch_cpu() {
             try {
-                var data = await fetch('2022/08/09/cpu.json')
+                var resp = await fetch('2022/07/09/cpu.json')
+                var data = resp.json()
                 console.log(data)
+                var frames = data.results.A.frames
+
+                var groups = []
+                var items = []
+                frames.forEach((frame, group) => {
+                    var group_name = frame.schema.fields.find(f => f.name == 'Value')?.labels.instance
+                    groups.push({
+                        id: group,
+                        content: group_name
+                    })
+                    var times = frame.data.values[0]
+                    var values = frame.data.values[1]
+
+                    for (var i = 0; i < times.length; i++) {
+                        items.push({
+                            x: times[i],
+                            y: values[i],
+                            group: group
+                        })
+                    }
+                })
+
+                var container = document.getElementById('visualization')
+                var graph2d = new vis.Graph2d(container, new vis.DataSet(items), new vis.DataSet(groups), {
+                    legend: {
+                        left: {
+                            position:"top-left"
+                        }
+                    }
+                })
             } catch (e) {
             }
         }
