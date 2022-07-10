@@ -17,8 +17,8 @@
         var items = new vis.DataSet([])
 
         function fetch_cpu(date) {
-            date = (date == null) ? new Date() : date
-            url = `${date.getFullYear()}/${('0'+(date.getMonth()+1)).slice(-2)}/${('0'+date.getDay()).slice(-2)}/cpu.json`
+            date = (date == null) ? new Date(new Date()-24*60*60*1000) : date
+            url = `${date.getFullYear()}/${('0'+(date.getMonth()+1)).slice(-2)}/${('0'+date.getDate()).slice(-2)}/cpu.json`
             fetch(url)
                 .then(resp => resp.json())
                 .then(data => {
