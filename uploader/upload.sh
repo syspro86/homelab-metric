@@ -1,6 +1,9 @@
 #!/bin/bash
 
+pushd $(dirname $0)
 source ./query_var.env
+
+./get_cpu.sh
 
 pushd ../data/
 git pull
