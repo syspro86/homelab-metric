@@ -1,3 +1,4 @@
+#!/bin/bash
 
 source ./grafana.env
 source ./query_var.env
@@ -28,6 +29,7 @@ generate_post_data()
 EOF
 }
 
+echo ${DT_YEAR}-${DT_MONTH}-${DT_DAY}
 mkdir -p ../data/${DT_YEAR}/${DT_MONTH}/${DT_DAY}
 
 curl -H "Authorization: Bearer ${GRAFANA_TOKEN}" \
