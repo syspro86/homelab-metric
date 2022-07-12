@@ -4,6 +4,7 @@ pushd $(dirname $0)
 source ./query_var.env
 
 ./get_cpu.sh
+./get_memory.sh
 
 pushd ../data/
 git pull
