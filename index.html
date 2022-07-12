@@ -15,7 +15,8 @@
         <button onclick="prev_day()">&lt;&lt;</button>
         <button onclick="next_day()">&gt;&gt;</button>
     </div>
-    <div id="visualization"></div>
+    <div id="visualization_cpu"></div>
+    <div id="visualization_memory"></div>
     <script type="text/javascript">
         var base_date = new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
         if (location.href.split('?').length >= 2) {
@@ -39,8 +40,7 @@
 
         function fetch_cpu() {
             const date = base_date
-            url = `${date.getFullYear()}/${('0' + (date.getMonth() + 1)).slice(-2)}/${('0' + date.getDate()).slice(-2)}/cpu.json`
-            fetch(url)
+            fetch(`${date.getFullYear()}/${('0' + (date.getMonth() + 1)).slice(-2)}/${('0' + date.getDate()).slice(-2)}/cpu.json`)
                 .then(resp => resp.json())
                 .then(data => {
                     var groups = []
@@ -68,7 +68,46 @@
                         }
                     })
 
-                    var container = document.getElementById('visualization')
+                    var container = document.getElementById('visualization_cpu')
+                    var graph2d = new vis.Graph2d(container, new vis.DataSet(items), new vis.DataSet(groups), {
+                        legend: {
+                            left: {
+                                position: "top-left"
+                            }
+                        }
+                    })
+
+                })
+                .catch(e => { })
+            fetch(`${date.getFullYear()}/${('0' + (date.getMonth() + 1)).slice(-2)}/${('0' + date.getDate()).slice(-2)}/memory.json`)
+                .then(resp => resp.json())
+                .then(data => {
+                    var groups = []
+                    var items = []
+                    var frames = data.results.A.frames
+
+                    frames.forEach(frame => {
+                        var group = frame.schema.fields.find(f => f.name == 'Value')?.labels?.instance
+                        if (group == null || group == '') {
+                            return
+                        }
+                        groups.push({
+                            id: group,
+                            content: group
+                        })
+                        var times = frame.data.values[0]
+                        var values = frame.data.values[1]
+
+                        for (var i = 0; i < times.length; i++) {
+                            items.push({
+                                x: times[i],
+                                y: values[i],
+                                group: group
+                            })
+                        }
+                    })
+
+                    var container = document.getElementById('visualization_memory')
                     var graph2d = new vis.Graph2d(container, new vis.DataSet(items), new vis.DataSet(groups), {
                         legend: {
                             left: {
