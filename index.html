@@ -74,6 +74,14 @@
                             left: {
                                 position: "top-left"
                             }
+                        },
+                        dataAxis; {
+                            left: {
+                                format: value => {
+                                    return value + 'Core'
+                                }
+                            },
+                            width: '200px'
                         }
                     })
 
@@ -113,6 +121,16 @@
                             left: {
                                 position: "top-left"
                             }
+                        },
+                        dataAxis; {
+                            left: {
+                                format: value => {
+                                    if (value > 1024*1024) return Math.floor(value/1024/1024) + 'MiB'
+                                    if (value > 1024) return Math.floor(value/1024) + 'KiB'
+                                    return value + 'B'
+                                }
+                            },
+                            width: '200px'
                         }
                     })
 
